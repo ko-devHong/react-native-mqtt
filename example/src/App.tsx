@@ -1,13 +1,16 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'react-native-mqtt';
+import mqtt from 'react-native-mqtt';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+  const [result, setResult] = React.useState<string>();
 
   React.useEffect(() => {
-    multiply(3, 7).then(setResult);
+    mqtt.connect('test.mosquitto.org', 'mqtt').then((r) => {
+      console.log(r);
+      setResult(r);
+    });
   }, []);
 
   return (

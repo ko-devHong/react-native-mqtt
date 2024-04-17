@@ -25,13 +25,13 @@ export type EventName =
   | 'message';
 
 interface IRNMqtt {
-  connect: (brokerUrl: string, protocol: 'mqtt' | 'mqtts') => Promise<void>;
+  connect: (brokerUrl: string, protocol: 'mqtt' | 'mqtts') => Promise<string>;
   on: (eventName: EventName, callBack: (_message: string) => void) => void;
 }
 
 const RNMqtt: IRNMqtt = {
   connect: async (brokerUrl, protocol) => {
-    await Mqtt.connect(brokerUrl, protocol);
+    return await Mqtt.connect(brokerUrl, protocol);
   },
   on: (eventName, callBack) => {
     Mqtt.on(eventName, callBack);
