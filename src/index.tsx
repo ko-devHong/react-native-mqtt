@@ -17,6 +17,25 @@ const Mqtt = NativeModules.Mqtt
       }
     );
 
-export function multiply(a: number, b: number): Promise<number> {
-  return Mqtt.multiply(a, b);
+export type EventName =
+  | 'connect'
+  | 'reconnect'
+  | 'error'
+  | 'publish'
+  | 'message';
+
+interface IRNMqtt {
+  connect: (brokerUrl: string, protocol: 'mqtt' | 'mqtts') => Promise<void>;
+  on: (eventName: EventName, callBack: (_message: string) => void) => void;
 }
+
+const RNMqtt: IRNMqtt = {
+  connect: async (brokerUrl, protocol) => {
+    await Mqtt.connect(brokerUrl, protocol);
+  },
+  on: (eventName, callBack) => {
+    Mqtt.on(eventName, callBack);
+  },
+};
+
+export default RNMqtt;
