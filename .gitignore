@@ -40,6 +40,12 @@ project.xcworkspace
 local.properties
 android.iml
 
+# Android/IntelliJ
+#
+*.iml
+*.hprof
+.cxx/
+
 # Cocoapods
 #
 example/ios/Pods

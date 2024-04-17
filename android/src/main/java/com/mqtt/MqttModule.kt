@@ -4,6 +4,8 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.Promise
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+
 
 class MqttModule(reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext) {
@@ -20,6 +22,6 @@ class MqttModule(reactContext: ReactApplicationContext) :
   }
 
   companion object {
-    const val NAME = "Mqtt"
+    const val NAME = "React-native-mqtt"
   }
 }
