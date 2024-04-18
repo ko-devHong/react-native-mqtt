@@ -50,6 +50,7 @@
   },
   "homepage": "https://github.com/ko-devHong/react-native-mqtt#readme",
   "publishConfig": {
+    "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
