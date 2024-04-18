@@ -50,12 +50,6 @@ jobs:
           git config --global user.email "dea972@naver.com"
           git config --global user.name "ko-devHong"
 
-      - name: Initialize The npm config
-        run: |
-          npm config set //reg.npmjs.org/:_authToken $NPM_TOKEN
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-
       - name: Run release
         run: |
           echo "\n//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}" >> .npmrc
