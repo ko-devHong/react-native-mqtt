@@ -45,10 +45,19 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 18
-          registry-url: https://registry.npmjs.org/
-      - run: yarn release
+      - name: Initialize Git user
+        run: |
+          git config --global user.email "dea972@naver.com"
+          git config --global user.name "ko-devHong"
+
+      - name: Initialize The npm config
+        run: |
+          npm config set //reg.npmjs.org/:_authToken $NPM_TOKEN
         env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+
+      - name: Run release
+        run: yarn release
+        env:
+          GIHUB_TOKEN: ${{secrets.GIHUB_TOKEN}}
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
