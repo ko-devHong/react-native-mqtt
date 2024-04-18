@@ -137,7 +137,7 @@ class MqttModule(reactContext: ReactApplicationContext) :
   }
 
   companion object {
-    const val NAME = "React-native-mqtt"
+    const val NAME = "Mqtt"
     var mqttAndroidClient: MqttAndroidClient? = null
 
     const  val serverUri = "mqtt://test.mosquitto.org"

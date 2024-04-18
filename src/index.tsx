@@ -6,8 +6,8 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
-const Mqtt = NativeModules['React-native-mqtt']
-  ? NativeModules['React-native-mqtt']
+const Mqtt = NativeModules.Mqtt
+  ? NativeModules.Mqtt
   : new Proxy(
       {},
       {
