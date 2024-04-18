@@ -21,6 +21,18 @@ jobs:
       - name: Typecheck files
         run: yarn typecheck
 
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: building
+        run: yarn prepare
+
   publish-npm:
     needs: build
     runs-on: ubuntu-latest
@@ -34,6 +46,6 @@ jobs:
 
       - run: git config --global user.email "dea972@naver.com"
       - run: git config --global user.name "ko-devHong"
-      - run: npm publish
+      - run: yarn release
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
