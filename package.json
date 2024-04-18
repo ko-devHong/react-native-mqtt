@@ -1,5 +1,5 @@
 {
-  "name": "react-native-mqtt",
+  "name": "@ko-developerhong/react-native-mqtt",
   "version": "0.0.1",
   "description": "use mqtt",
   "main": "lib/commonjs/index",
