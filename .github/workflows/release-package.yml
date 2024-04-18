@@ -22,6 +22,7 @@ jobs:
         run: yarn typecheck
 
   build:
+    needs: lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -44,8 +45,10 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
-      - run: git config --global user.email "dea972@naver.com"
-      - run: git config --global user.name "ko-devHong"
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 18
+          registry-url: https://registry.npmjs.org/
       - run: yarn release
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
