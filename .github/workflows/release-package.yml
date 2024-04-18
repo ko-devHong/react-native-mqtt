@@ -3,7 +3,7 @@ name: react-native-mqtt Package
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   lint:
@@ -31,7 +31,7 @@ jobs:
 
       - name: Setup
         uses: ./.github/actions/setup
-        
+
       - run: git config --global user.email "dea972@naver.com"
       - run: git config --global user.name "ko-devHong"
       - run: npm publish
