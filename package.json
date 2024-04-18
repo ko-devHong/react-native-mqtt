@@ -1,7 +1,7 @@
 {
   "name": "@ko-developerhong/react-native-mqtt",
   "version": "0.0.1",
-  "description": "use mqtt",
+  "description": "use mqtt in react-native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/src/index.d.ts",
@@ -23,7 +23,8 @@
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__",
-    "!**/.*"
+    "!**/.*",
+    "!android/*.hprof"
   ],
   "scripts": {
     "example": "yarn workspace react-native-mqtt-example",
@@ -37,7 +38,9 @@
   "keywords": [
     "react-native",
     "ios",
-    "android"
+    "android",
+    "react-native-mqtt",
+    "mqtt"
   ],
   "repository": {
     "type": "git",
@@ -70,7 +73,7 @@
     "react": "18.2.0",
     "react-native": "0.73.6",
     "react-native-builder-bob": "^0.20.0",
-    "release-it": "^15.0.0",
+    "release-it": "^15.11.0",
     "turbo": "^1.10.7",
     "typescript": "^5.2.2"
   },
@@ -96,23 +99,6 @@
     "extends": [
       "@commitlint/config-conventional"
     ]
-  },
-  "release-it": {
-    "git": {
-      "commitMessage": "chore: release ${version}",
-      "tagName": "v${version}"
-    },
-    "npm": {
-      "publish": true
-    },
-    "github": {
-      "release": true
-    },
-    "plugins": {
-      "@release-it/conventional-changelog": {
-        "preset": "angular"
-      }
-    }
   },
   "eslintConfig": {
     "root": true,

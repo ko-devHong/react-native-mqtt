@@ -52,7 +52,7 @@ jobs:
 
       - name: Run release
         run: |
-          echo "\n//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}" >> .npmrc
+          echo "\n@ko-developerhong:registry=https://npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}" >> .npmrc
           yarn release
         env:
           GIHUB_TOKEN: ${{secrets.GIHUB_TOKEN}}
