@@ -53,7 +53,7 @@ jobs:
       - name: Run release
         run: |
           npm config set @ko-developerhong:registry https://registry.npmjs.org
-          npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
+          npm config set //registry.npmjs.org/:_authToken $NODE_AUTH_TOKEN
           yarn release
         env:
           GIT_HUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
