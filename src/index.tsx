@@ -152,7 +152,7 @@ class MqttClient {
       protocol = 'ssl';
     }
     if (!protocol) {
-      protocol = options.protocol ?? 'mqtt';
+      protocol = options.protocol ?? 'tcp';
     }
     const hostname = urlMatch?.[1] || host;
     const url = `${protocol}://${hostname}`;
