@@ -142,8 +142,8 @@ class MqttClient {
     );
   }
 
-  public connect(host: string, options: ConnectionOptions) {
-    const urlMatch = host.split('://');
+  private setHostUrl(_url: string, _protocol: ConnectionOptions['protocol']) {
+    const urlMatch = _url.split('://');
     let protocol = urlMatch?.[0];
     if (protocol === 'mqtt') {
       protocol = 'tcp';
@@ -152,13 +152,16 @@ class MqttClient {
       protocol = 'ssl';
     }
     if (!protocol) {
-      protocol = options.protocol ?? 'tcp';
+      protocol = _protocol ?? 'tcp';
     }
-    const hostname = urlMatch?.[1] || host;
-    const url = `${protocol}://${hostname}`;
+    const hostname = urlMatch?.[1] || _url;
+    this.url = `${protocol}://${hostname}`;
+  }
+
+  public connect(host: string, options: ConnectionOptions) {
+    this.setHostUrl(host, options.protocol);
 
     return new Promise((resolve, reject) => {
-      this.url = url;
       if (this.closed) {
         reject(new Error('client already closed'));
       }
