@@ -2367,6 +2367,8 @@ __metadata:
     "@release-it/conventional-changelog": ^5.0.0
     "@types/jest": ^29.5.5
     "@types/react": ^18.2.44
+    "@types/uniqid": ^5.3.4
+    buffer: ^6.0.3
     commitlint: ^17.0.2
     del-cli: ^5.1.0
     eslint: ^8.51.0
@@ -2378,8 +2380,10 @@ __metadata:
     react-native: 0.73.6
     react-native-builder-bob: ^0.20.0
     release-it: ^15.11.0
+    tiny-emitter: ^2.1.0
     turbo: ^1.10.7
     typescript: ^5.2.2
+    uniqid: ^5.4.0
   peerDependencies:
     react: "*"
     react-native: "*"
@@ -3304,6 +3308,13 @@ __metadata:
   version: 2.0.3
   resolution: "@types/stack-utils@npm:2.0.3"
   checksum: 72576cc1522090fe497337c2b99d9838e320659ac57fa5560fcbdcbafcf5d0216c6b3a0a8a4ee4fdb3b1f5e3420aa4f6223ab57b82fef3578bec3206425c6cf5
+  languageName: node
+  linkType: hard
+
+"@types/uniqid@npm:^5.3.4":
+  version: 5.3.4
+  resolution: "@types/uniqid@npm:5.3.4"
+  checksum: 47ea4ff591630e35c39b45ba45709efa61bd0880fefadc376ea32f2cb2e29b9c2a5566f23b3cf08c84c78bbafedae5a1f8fb4aa1fb217fc61b4d9721d2a61168
   languageName: node
   linkType: hard
 
@@ -12356,6 +12367,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tiny-emitter@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "tiny-emitter@npm:2.1.0"
+  checksum: fbcfb5145751a0e3b109507a828eb6d6d4501352ab7bb33eccef46e22e9d9ad3953158870a6966a59e57ab7c3f9cfac7cab8521db4de6a5e757012f4677df2dd
+  languageName: node
+  linkType: hard
+
 "titleize@npm:^3.0.0":
   version: 3.0.0
   resolution: "titleize@npm:3.0.0"
@@ -12789,6 +12807,13 @@ __metadata:
   version: 2.1.0
   resolution: "unicode-property-aliases-ecmascript@npm:2.1.0"
   checksum: 243524431893649b62cc674d877bd64ef292d6071dd2fd01ab4d5ad26efbc104ffcd064f93f8a06b7e4ec54c172bf03f6417921a0d8c3a9994161fe1f88f815b
+  languageName: node
+  linkType: hard
+
+"uniqid@npm:^5.4.0":
+  version: 5.4.0
+  resolution: "uniqid@npm:5.4.0"
+  checksum: 69fc28e7b2b5b24227b4295e51aa7c1d4085a60655ad071db8fc350876cc9044d68ee0781c0d27c2c98691380aa418970e0d1b02a1e4564480f9d19b0dc1707b
   languageName: node
   linkType: hard
 

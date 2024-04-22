@@ -63,6 +63,7 @@
     "@release-it/conventional-changelog": "^5.0.0",
     "@types/jest": "^29.5.5",
     "@types/react": "^18.2.44",
+    "@types/uniqid": "^5.3.4",
     "commitlint": "^17.0.2",
     "del-cli": "^5.1.0",
     "eslint": "^8.51.0",
@@ -143,5 +144,10 @@
         }
       ]
     ]
+  },
+  "dependencies": {
+    "buffer": "^6.0.3",
+    "tiny-emitter": "^2.1.0",
+    "uniqid": "^5.4.0"
   }
 }
