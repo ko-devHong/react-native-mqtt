@@ -20,13 +20,17 @@ class MqttModule(reactContext: ReactApplicationContext) :
     return NAME
   }
 
+  fun isInRange(number: Int?): Boolean {
+    return number != null && number in 0..999
+  }
+
   @ReactMethod
   fun newClient(id: String) {
     clients[id] = _reactContext?.let { Mqtt(it,id) }!!
   }
 
   @ReactMethod
-  fun connect(id: String?, host: String?, options: ReadableMap, callback: Callback) {
+  fun connect(id: String?, host: String, options: ReadableMap, callback: Callback) {
     if (!clients.containsKey(id)) {
       return
     }
@@ -34,11 +38,11 @@ class MqttModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  fun subscribe(id: String?, topicList: ReadableArray, qosList: ReadableArray) {
+  fun subscribe(id: String?, topic: String, qos: Int) {
     if (!clients.containsKey(id)) {
       return
     }
-    clients[id]?.subscribe(topicList, qosList)
+    clients[id]?.subscribe(topic, qos)
   }
 
   @ReactMethod
@@ -72,6 +76,17 @@ class MqttModule(reactContext: ReactApplicationContext) :
     }
     clients[id]?.close()
     clients.remove(id)
+  }
+
+
+  @ReactMethod
+  fun addListener(type: String?) {
+    // Keep: Required for RN built in Event Emitter Calls.
+  }
+
+  @ReactMethod
+  fun removeListeners(type: Int?) {
+    // Keep: Required for RN built in Event Emitter Calls.
   }
 
   companion object {

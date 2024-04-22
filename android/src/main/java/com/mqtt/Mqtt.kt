@@ -79,23 +79,15 @@ class Mqtt(reactContext: ReactApplicationContext, originId:String) {
         }
       }
       client.get().setCallback(MqttEventCallback())
-      client.get().connect(connOpts, null, ConnectMqttActionListener())
+      client.get().connect(connOpts, _reactContext, ConnectMqttActionListener())
     }catch (ex: java.lang.Exception) {
       callback.invoke(ex.message)
       ex.printStackTrace()
     }
   }
 
-  fun subscribe(topicList: ReadableArray, qosList: ReadableArray) {
+  fun subscribe(topic: String, qos: Int) {
     try  {
-      val topic: Array<String?> = arrayOfNulls<String>(topicList.size())
-      val qos: IntArray = IntArray(qosList.size())
-      for (x in 0 until topicList.size())  {
-        topic[x] = topicList.getString(x)
-      }
-      for (y in 0 until qosList.size())  {
-        qos[y] = qosList.getInt(y)
-      }
       client.get().subscribe(topic, qos, null, SubscribeMqttActionListener())
     }catch (ex: java.lang.Exception) {
       val params: WritableMap = com.facebook.react.bridge.Arguments.createMap()
@@ -173,6 +165,7 @@ class Mqtt(reactContext: ReactApplicationContext, originId:String) {
     override fun connectComplete(reconnect: Boolean, serverURI: String) {
       val params: WritableMap = com.facebook.react.bridge.Arguments.createMap()
       params.putBoolean("reconnect", reconnect)
+      params.putString("serverURI",serverURI)
       sendEvent(CONNECT_EVENT, params)
     }
   }

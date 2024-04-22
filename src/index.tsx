@@ -1,6 +1,6 @@
 import { NativeEventEmitter, NativeModules, Platform } from 'react-native';
 import { TinyEmitter } from 'tiny-emitter';
-import uniqid from 'uniqid';
+import uuid from 'react-native-uuid';
 import { Buffer } from 'buffer';
 
 const LINKING_ERROR =
@@ -42,6 +42,7 @@ export interface ConnectionOptions {
   tls?: TlsOptions;
   allowUntrustedCA?: boolean;
   enableSsl?: boolean;
+  protocol?: 'mqtt' | 'mqtts' | 'local' | 'ws' | 'wss';
 }
 
 export interface PublishOptions {
@@ -68,11 +69,14 @@ export type MessageEventHandler = (topic: string, message: Buffer) => void;
 export type DisconnectEventHandler = (cause: string) => void;
 export type ErrorEventHandler = (error: string) => void;
 
-export type MQTTEventHandler =
-  | ConnectEventHandler
-  | MessageEventHandler
-  | DisconnectEventHandler
-  | ErrorEventHandler;
+export type MQTTEventHandler<T extends ClientEvent> =
+  T extends ClientEvent.Connect
+    ? ConnectEventHandler
+    : T extends ClientEvent.Message
+      ? MessageEventHandler
+      : T extends ClientEvent.Disconnect
+        ? DisconnectEventHandler
+        : ErrorEventHandler;
 
 class MqttClient {
   private readonly id: string;
@@ -84,7 +88,7 @@ class MqttClient {
 
   constructor() {
     this.emitter = new TinyEmitter();
-    this.id = uniqid();
+    this.id = uuid.v4().toString();
     NativeMqtt.newClient(this.id);
 
     mqttEventEmitter.addListener(
@@ -138,46 +142,60 @@ class MqttClient {
     );
   }
 
-  public connect(
-    host: string,
-    options: ConnectionOptions,
-    callback: (error?: Error) => void
-  ) {
-    this.url = host;
-    if (this.closed) {
-      throw new Error('client already closed');
+  public connect(host: string, options: ConnectionOptions) {
+    const urlMatch = host.split('://');
+    let protocol = urlMatch?.[0];
+    if (protocol === 'mqtt') {
+      protocol = 'tcp';
     }
-
-    if (this.connected) {
-      throw new Error('client already connected');
+    if (protocol === 'mqtts') {
+      protocol = 'ssl';
     }
-
-    const opts: ConnectionOptions = Object.assign(
-      {},
-      { ...options, clientId: 'clientId' }
-    );
-    if (opts.tls && opts.tls.p12) {
-      opts.tls = Object.assign({}, opts.tls);
-      opts.tls.p12 = opts.tls.p12?.toString('base64') as any;
+    if (!protocol) {
+      protocol = options.protocol ?? 'mqtt';
     }
+    const hostname = urlMatch?.[1] || host;
+    const url = `${protocol}://${hostname}`;
 
-    if (opts.tls && opts.tls.caDer) {
-      opts.tls = Object.assign({}, opts.tls);
-      opts.tls.caDer = opts.tls.caDer?.toString('base64') as any;
-    }
-
-    NativeMqtt.connect(this.id, this.url, opts, (err: string) => {
-      if (err) {
-        callback(new Error(err));
-        return;
+    return new Promise((resolve, reject) => {
+      this.url = url;
+      if (this.closed) {
+        reject(new Error('client already closed'));
       }
 
-      this.connected = true;
-      callback();
+      if (this.connected) {
+        console.error('client already connected');
+        return;
+        // reject(new Error('client already connected'))
+      }
+
+      const opts: ConnectionOptions = Object.assign(
+        {},
+        { ...options, clientId: 'clientId' }
+      );
+      if (opts.tls && opts.tls.p12) {
+        opts.tls = Object.assign({}, opts.tls);
+        opts.tls.p12 = opts.tls.p12?.toString('base64') as any;
+      }
+
+      if (opts.tls && opts.tls.caDer) {
+        opts.tls = Object.assign({}, opts.tls);
+        opts.tls.caDer = opts.tls.caDer?.toString('base64') as any;
+      }
+
+      NativeMqtt.connect(this.id, this.url, opts, (err: string) => {
+        if (err) {
+          reject(new Error(err));
+          return;
+        }
+
+        this.connected = true;
+        resolve(true);
+      });
     });
   }
 
-  public subscribe(topics: string[], qos: number[]) {
+  public subscribe(topic: string, qos: number = 0) {
     if (this.closed) {
       throw new Error('client already closed');
     }
@@ -185,8 +203,7 @@ class MqttClient {
     if (!this.connected) {
       throw new Error('client not connected');
     }
-
-    NativeMqtt.subscribe(this.id, topics, qos);
+    NativeMqtt.subscribe(this.id, topic, qos);
   }
 
   public unsubscribe(topics: string[]) {
@@ -203,7 +220,7 @@ class MqttClient {
 
   public publish(
     topic: string,
-    message: Buffer,
+    message: string,
     qos: number = 0,
     retained: boolean = false
   ) {
@@ -218,7 +235,7 @@ class MqttClient {
     NativeMqtt.publish(
       this.id,
       topic,
-      message.toString('base64'),
+      Buffer.from(message, 'utf-8').toString('base64'),
       qos,
       retained
     );
@@ -242,7 +259,11 @@ class MqttClient {
     this.emitter = null;
   }
 
-  public on(name: ClientEvent, handler: MQTTEventHandler, context?: any): void {
+  public on<T extends ClientEvent>(
+    name: T,
+    handler: MQTTEventHandler<T>,
+    context?: any
+  ): void {
     if (this.closed) {
       throw new Error('client already closed');
     }
@@ -250,9 +271,9 @@ class MqttClient {
     this.emitter?.on(name, handler, context);
   }
 
-  public once(
-    name: ClientEvent,
-    handler: MQTTEventHandler,
+  public once<T extends ClientEvent>(
+    name: T,
+    handler: MQTTEventHandler<T>,
     context?: any
   ): void {
     if (this.closed) {
@@ -262,7 +283,10 @@ class MqttClient {
     this.emitter?.once(name, handler, context);
   }
 
-  public off(name: ClientEvent, handler?: MQTTEventHandler): void {
+  public off<T extends ClientEvent>(
+    name: T,
+    handler?: MQTTEventHandler<T>
+  ): void {
     if (this.closed) {
       throw new Error('client already closed');
     }
