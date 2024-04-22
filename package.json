@@ -1,6 +1,6 @@
 {
   "name": "@ko-developerhong/react-native-mqtt",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "use mqtt in react-native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
