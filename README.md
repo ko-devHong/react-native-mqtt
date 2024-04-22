@@ -27,7 +27,7 @@ import MqttClient, { ConnectionOptions, ClientEvent, MQTTEventHandler } from 're
 To connect to the message broker, use the connect method, which takes the host address and connection options as arguments.
 
 ```tsx
-import MqttClient, { ConnectionOptions, ClientEvent, MQTTEventHandler } from 'react-native-mqtt';
+import MqttClient, { ConnectionOptions } from 'react-native-mqtt';
 
 const options: ConnectionOptions = {
   clientId: 'myClientId',
@@ -58,11 +58,21 @@ MqttClient.connect('mqtt://broker.hivemq.com', options)
 ## Subscribe
 To subscribe to a specific topic, use the subscribe method.
 ```ts
+type MQTT = {
+  subscribe: (topic: string, qos?: number) => void;
+};
+```
+```ts
 MqttClient.subscribe('myTopic', 0);
 ```
 
 ## Publish a message
 To publish a message, use the publish method.
+```ts
+type MQTT = {
+  publish: (topic: string, message: string, qos?: number , retained?: boolean) => void,
+}
+```
 ```ts
 MqttClient.publish('myTopic', 'Hello, World!', 0, false);
 ```
