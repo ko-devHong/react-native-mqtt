@@ -49,7 +49,7 @@ export interface PublishOptions {
   qos?: number;
 }
 
-export enum Event {
+export enum ClientEvent {
   Connect = 'connect',
   Disconnect = 'disconnect',
   Message = 'message',
@@ -78,15 +78,13 @@ class MqttClient {
   private readonly id: string;
   private emitter: TinyEmitter | null;
 
-  private readonly url: string;
+  private url: string = '';
   private connected: boolean = false;
   private closed: boolean = false;
 
-  constructor(url: string) {
+  constructor() {
     this.emitter = new TinyEmitter();
     this.id = uniqid();
-    this.url = url;
-
     NativeMqtt.newClient(this.id);
 
     mqttEventEmitter.addListener(
@@ -97,7 +95,7 @@ class MqttClient {
         }
 
         this.connected = true;
-        this.emitter?.emit(Event.Connect, event.reconnect);
+        this.emitter?.emit(ClientEvent.Connect, event.reconnect);
       }
     );
 
@@ -109,7 +107,7 @@ class MqttClient {
         }
 
         this.emitter?.emit(
-          Event.Message,
+          ClientEvent.Message,
           event.topic,
           Buffer.from(event.message, 'base64')
         );
@@ -124,26 +122,28 @@ class MqttClient {
         }
 
         this.connected = false;
-        this.emitter?.emit(Event.Disconnect, event.cause);
+        this.emitter?.emit(ClientEvent.Disconnect, event.cause);
       }
     );
 
     mqttEventEmitter.addListener(
-      'rn-native-mqtt_error',
+      NativeEvent.ERROR_EVENT,
       (event: { id: string; error: string }) => {
         if (event.id !== this.id) {
           return;
         }
 
-        this.emitter?.emit(Event.Error, event.error);
+        this.emitter?.emit(ClientEvent.Error, event.error);
       }
     );
   }
 
   public connect(
+    host: string,
     options: ConnectionOptions,
     callback: (error?: Error) => void
   ) {
+    this.url = host;
     if (this.closed) {
       throw new Error('client already closed');
     }
@@ -242,7 +242,7 @@ class MqttClient {
     this.emitter = null;
   }
 
-  public on(name: Event, handler: MQTTEventHandler, context?: any): void {
+  public on(name: ClientEvent, handler: MQTTEventHandler, context?: any): void {
     if (this.closed) {
       throw new Error('client already closed');
     }
@@ -250,7 +250,11 @@ class MqttClient {
     this.emitter?.on(name, handler, context);
   }
 
-  public once(name: Event, handler: MQTTEventHandler, context?: any): void {
+  public once(
+    name: ClientEvent,
+    handler: MQTTEventHandler,
+    context?: any
+  ): void {
     if (this.closed) {
       throw new Error('client already closed');
     }
@@ -258,7 +262,7 @@ class MqttClient {
     this.emitter?.once(name, handler, context);
   }
 
-  public off(name: Event, handler?: MQTTEventHandler): void {
+  public off(name: ClientEvent, handler?: MQTTEventHandler): void {
     if (this.closed) {
       throw new Error('client already closed');
     }
@@ -267,4 +271,4 @@ class MqttClient {
   }
 }
 
-export default MqttClient;
+export default new MqttClient();

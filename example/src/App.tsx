@@ -1,18 +1,17 @@
 import * as React from 'react';
 
 import { StyleSheet, Text, View } from 'react-native';
-import MqttClient, { Event } from 'react-native-mqtt';
+import MqttClient, { ClientEvent } from 'react-native-mqtt';
 
 export default function App() {
   const [result, setResult] = React.useState<Error>();
 
   React.useEffect(() => {
-    const mqtt = new MqttClient('mqtt://test.mosquitto.org');
-    mqtt.connect({}, (e) => {
+    MqttClient.connect('mqtt://test.mosquitto.org', {}, (e) => {
       console.error(e);
       setResult(e);
     });
-    mqtt.on(Event.Connect, (reconnect: boolean) => {
+    MqttClient.on(ClientEvent.Connect, (reconnect: boolean) => {
       console.log(reconnect);
     });
   }, []);
