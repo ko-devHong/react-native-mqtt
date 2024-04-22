@@ -41,8 +41,12 @@ class Mqtt(reactContext: ReactApplicationContext, originId:String) {
       connOpts.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1_1)
       connOpts.setMaxInflight(if (options.hasKey("maxInFlightMessages"))options.getInt("maxInFlightMessages") else 10)
       connOpts.isAutomaticReconnect = options.hasKey("autoReconnect") && options.getBoolean("autoReconnect")
-      connOpts.setUserName(if (options.hasKey("username"))options.getString("username") else "")
-      connOpts.password = if (options.hasKey("password")) options.getString("password")!!.toCharArray() else "".toCharArray()
+      if (options.hasKey("username")) {
+        connOpts.setUserName(options.getString("username"))
+      }
+      if(options.hasKey("password")) {
+        connOpts.password = options.getString("password")!!.toCharArray()
+      }
       if (options.hasKey("tls")) {
         val tlsOptions: ReadableMap? = options.getMap("tls")
         val ca: String? = if (tlsOptions!!.hasKey("caDer")) tlsOptions!!.getString("caDer") else null
