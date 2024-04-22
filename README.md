@@ -5,7 +5,7 @@ use mqtt
 ## Installation
 
 ```sh
-npm install react-native-mqtt
+npm install @ko-developerhong/react-native-mqtt
 ```
 
 ## Usage
