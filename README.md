@@ -1,6 +1,12 @@
 # react-native-mqtt
 
-use mqtt
+This is an MQTT client library for React Native.
+
+This library uses the following native MQTT client libraries:
+
+> iOS - https://github.com/emqx/CocoaMQTT
+>
+> Android - https://github.com/eclipse/paho.mqtt.android
 
 ## Installation
 
