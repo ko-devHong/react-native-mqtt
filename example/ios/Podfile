@@ -28,6 +28,9 @@ end
 target 'MqttExample' do
   config = use_native_modules!
 
+  pod "CocoaMQTT", :modular_headers => true
+  pod "MqttCocoaAsyncSocket", :modular_headers => true
+
   use_react_native!(
     :path => config[:reactNativePath],
     # Enables Flipper.

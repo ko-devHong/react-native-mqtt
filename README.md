@@ -105,6 +105,12 @@ To close the library, use the close method.
 MqttClient.close();
 ```
 
+## Troubleshooting
+> The Swift pod `CocoaMQTT` depends upon `MqttCocoaAsyncSocket`, which does not define modules.
+```
+you may set `use_modular_headers!` globally in your Podfile, or specify `:modular_headers => true` for particular dependencies.
+```
+
 ## Contributing
 
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
@@ -115,6 +121,7 @@ See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the 
 - This library supports TypeScript.
 - This library is used to communicate with the message broker using the MQTT protocol.
 - This library is based on [react-native-mqtt](https://github.com/davesters/rn-native-mqtt).
+
 
 ## License
 

@@ -145,14 +145,18 @@ class MqttClient {
   private setHostUrl(_url: string, _protocol: ConnectionOptions['protocol']) {
     const urlMatch = _url.split('://');
     let protocol = urlMatch?.[0];
-    if (protocol === 'mqtt') {
-      protocol = 'tcp';
-    }
-    if (protocol === 'mqtts') {
-      protocol = 'ssl';
+    const isAndroid = Platform.OS === 'android';
+    const defaultProtocol = isAndroid ? 'tcp' : 'mqtt';
+    if (isAndroid) {
+      if (protocol === 'mqtt') {
+        protocol = 'tcp';
+      }
+      if (protocol === 'mqtts') {
+        protocol = 'ssl';
+      }
     }
     if (!protocol) {
-      protocol = _protocol ?? 'tcp';
+      protocol = _protocol ?? defaultProtocol;
     }
     const hostname = urlMatch?.[1] || _url;
     this.url = `${protocol}://${hostname}`;
