@@ -12,6 +12,13 @@ This library uses the following native MQTT client libraries:
 
 To use this library, you must first install it using npm or yarn.
 
+## IOS Setup
+Add Podfile
+```
+pod "CocoaMQTT", :modular_headers => true
+pod "MqttCocoaAsyncSocket", :modular_headers => true
+```
+
 ```sh
 npm install @ko-developerhong/react-native-mqtt
 # OR
