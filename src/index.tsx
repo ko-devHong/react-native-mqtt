@@ -147,13 +147,11 @@ class MqttClient {
     let protocol = urlMatch?.[0];
     const isAndroid = Platform.OS === 'android';
     const defaultProtocol = isAndroid ? 'tcp' : 'mqtt';
-    if (isAndroid) {
-      if (protocol === 'mqtt') {
-        protocol = 'tcp';
-      }
-      if (protocol === 'mqtts') {
-        protocol = 'ssl';
-      }
+    if (protocol === 'mqtt') {
+      protocol = 'tcp';
+    }
+    if (protocol === 'mqtts') {
+      protocol = 'ssl';
     }
     if (!protocol) {
       protocol = _protocol ?? defaultProtocol;
