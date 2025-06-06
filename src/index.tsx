@@ -176,7 +176,7 @@ class MqttClient {
 
       const opts: ConnectionOptions = Object.assign(
         {},
-        { ...options, clientId: 'clientId' }
+        { clientId: 'clientId', ...options }
       );
       if (opts.tls && opts.tls.p12) {
         opts.tls = Object.assign({}, opts.tls);
